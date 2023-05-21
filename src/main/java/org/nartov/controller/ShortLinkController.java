@@ -20,13 +20,13 @@ public class ShortLinkController {
     private ShortLinkService shortLinkService;
 
     @GetMapping("/{shortLinkToken}")
-    public ResponseEntity<Void> getShortLink(@RequestParam String shortLinkToken) {
+    public ResponseEntity<Void> getShortLink(@PathVariable String shortLinkToken) {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(shortLinkService.getShortLink(shortLinkToken).getFullUrl()))
                 .build();
     }
 
-    @PostMapping
+    @PostMapping("/generate")
     public ShortLinkDTO generateShortLink(@RequestBody ShortLinkRequest shortLinkRequest) throws Exception {
         return shortLinkService.createShortLink(shortLinkRequest);
     }
