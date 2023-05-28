@@ -30,7 +30,7 @@ public class LinkUserServiceImpl implements LinkUserService {
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
-    public LinkUserDTO login(LinkUserRequest userRequest) {
+    public LinkUserDTO login(LinkUserRequest userRequest) throws BadCredentialsException {
         LinkUser linkUser = linkUserRepository.findByEmail(userRequest.getEmail());
         if(bcryptEncoder.matches(userRequest.getPassword(), linkUser.getPassword())){
             String token = createAuthenticationToken(linkUser);
@@ -48,7 +48,7 @@ public class LinkUserServiceImpl implements LinkUserService {
         return mapLinkUserToLinkUserDTO(linkUser, token);
     }
 
-    private String createAuthenticationToken(LinkUser linkUser){
+    private String createAuthenticationToken(LinkUser linkUser) throws BadCredentialsException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(linkUser.getEmail(), linkUser.getPassword()));
         } catch (DisabledException | BadCredentialsException e) {
