@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .disable()
                 .authorizeRequests()
                     .antMatchers("/user","/shortLinks","/swagger-ui*").permitAll()
-                    .antMatchers("/ууууу").authenticated()
+                    .antMatchers("/shortLinks/generate").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
