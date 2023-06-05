@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ShortLinkServiceImpl implements ShortLinkService {
     @Autowired
@@ -26,6 +29,13 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     public ShortLinkDTO getShortLink(String shortLinkToken) {
         ShortLink shortLink = shortLinkRepository.findByShortLinkToken(shortLinkToken);
         return mapShortLinkToDTO(shortLink);
+    }
+
+    public List<ShortLinkDTO> getAllShortLink() {
+        return shortLinkRepository.findAll()
+                .stream()
+                .map(this::mapShortLinkToDTO)
+                .collect(Collectors.toList());
     }
 
     public ShortLinkDTO createShortLink(ShortLinkRequest shortLinkRequest) throws UserNotFoundException {

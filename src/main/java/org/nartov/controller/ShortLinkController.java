@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/shortLinks",
@@ -24,6 +25,11 @@ public class ShortLinkController {
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(shortLinkService.getShortLink(shortLinkToken).getFullUrl()))
                 .build();
+    }
+
+    @GetMapping("/all")
+    public List<ShortLinkDTO> getAllShortLink() {
+        return shortLinkService.getAllShortLink();
     }
 
     @PostMapping("/generate")

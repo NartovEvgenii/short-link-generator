@@ -34,11 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                    .disable()
+        httpSecurity.httpBasic().disable()
+                .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/user","/shortLinks","/swagger-ui*").permitAll()
-                    .antMatchers("/shortLinks/generate").authenticated()
+                    .antMatchers("/user/*","/shortLinks","/swagger-ui*").permitAll()
+                    .antMatchers("/yyyyy").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -50,7 +50,7 @@ public class LinkUserServiceImpl implements LinkUserService {
 
     private String createAuthenticationToken(LinkUser linkUser) throws BadCredentialsException {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(linkUser.getEmail(), linkUser.getPassword()));
+            // authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(linkUser.getEmail(), linkUser.getPassword()));
         } catch (DisabledException | BadCredentialsException e) {
             throw new BadCredentialsException("There is no user with this password or login.");
         }

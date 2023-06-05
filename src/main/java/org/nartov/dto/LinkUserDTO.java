@@ -2,7 +2,6 @@ package org.nartov.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 
 @Data
 public class LinkUserDTO {
