@@ -9,7 +9,6 @@ import org.nartov.repository.ShortLinkRepository;
 import org.nartov.service.ShortLinkService;
 import org.nartov.utils.ShortLinkTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,11 +30,16 @@ public class ShortLinkServiceImpl implements ShortLinkService {
         return mapShortLinkToDTO(shortLink);
     }
 
-    public List<ShortLinkDTO> getAllShortLink() {
-        return shortLinkRepository.findAll()
+    public List<ShortLinkDTO> getShortLinkByUser(Long idUser) {
+        return shortLinkRepository.findAllByIdUser(idUser)
                 .stream()
                 .map(this::mapShortLinkToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteShortLink(Long idShortLink) {
+        shortLinkRepository.deleteById(idShortLink);
     }
 
     public ShortLinkDTO createShortLink(ShortLinkRequest shortLinkRequest) throws UserNotFoundException {

@@ -22,39 +22,38 @@ import java.util.ArrayList;
 public class LinkUserServiceImpl implements LinkUserService {
     @Autowired
     private LinkUserRepository linkUserRepository;
-
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private PasswordEncoder bcryptEncoder;
+
     public LinkUserDTO login(LinkUserRequest userRequest) throws BadCredentialsException {
         LinkUser linkUser = linkUserRepository.findByEmail(userRequest.getEmail());
-        if(bcryptEncoder.matches(userRequest.getPassword(), linkUser.getPassword())){
-            String token = createAuthenticationToken(linkUser);
-            return mapLinkUserToLinkUserDTO(linkUser, token);
-        } else {
-            throw new BadCredentialsException("There is no user with this password or login in database.");
-        }
+        String token = checkAuthentication(linkUser.getEmail(), userRequest.getPassword());
+        return mapLinkUserToLinkUserDTO(linkUser, token);
     }
 
 
     public LinkUserDTO register(LinkUserDTORequest userDTORequest) {
         LinkUser linkUser = mapLinkUserDTORequestToLinkUserDTO(userDTORequest);
         linkUser = linkUserRepository.save(linkUser);
-        String token = jwtTokenUtil.generateToken(new User(linkUser.getEmail(), linkUser.getPassword(), new ArrayList<>()));
+        String token = createAuthenticationToken(linkUser.getEmail(), linkUser.getPassword());
         return mapLinkUserToLinkUserDTO(linkUser, token);
     }
 
-    private String createAuthenticationToken(LinkUser linkUser) throws BadCredentialsException {
+    private String checkAuthentication(String email, String password) throws BadCredentialsException {
         try {
-            // authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(linkUser.getEmail(), linkUser.getPassword()));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException | BadCredentialsException e) {
             throw new BadCredentialsException("There is no user with this password or login.");
         }
-        return jwtTokenUtil.generateToken(new User(linkUser.getEmail(), linkUser.getPassword(), new ArrayList<>()));
+        return createAuthenticationToken(email, password);
+    }
+
+    private String createAuthenticationToken(String email, String password){
+        return jwtTokenUtil.generateToken(new User(email, password, new ArrayList<>()));
     }
 
     private LinkUserDTO mapLinkUserToLinkUserDTO(LinkUser linkUser, String token){

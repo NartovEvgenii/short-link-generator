@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ShortLinkService {
     ShortLinkDTO getShortLink(String shortLinkToken);
-
-    List<ShortLinkDTO> getAllShortLink();
+    List<ShortLinkDTO> getShortLinkByUser(Long idUser);
+    void deleteShortLink(Long idShortLink);
     ShortLinkDTO createShortLink(ShortLinkRequest shortLinkRequest) throws UserNotFoundException;
 }

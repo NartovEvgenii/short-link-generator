@@ -13,8 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/shortLinks",
-                produces = "application/json")
+@RequestMapping(produces = "application/json")
 public class ShortLinkController {
 
     @Autowired
@@ -27,12 +26,17 @@ public class ShortLinkController {
                 .build();
     }
 
-    @GetMapping("/all")
-    public List<ShortLinkDTO> getAllShortLink() {
-        return shortLinkService.getAllShortLink();
+    @GetMapping("/shortLinks")
+    public List<ShortLinkDTO> getShortLinkByUser(@RequestParam Long idUser) {
+        return shortLinkService.getShortLinkByUser(idUser);
     }
 
-    @PostMapping("/generate")
+    @DeleteMapping("/shortLinks")
+    public void deleteShortLink(@RequestParam Long idShortLink) {
+        shortLinkService.deleteShortLink(idShortLink);
+    }
+
+    @PostMapping("/shortLinks/generate")
     public ShortLinkDTO generateShortLink(@RequestBody ShortLinkRequest shortLinkRequest) throws Exception {
         return shortLinkService.createShortLink(shortLinkRequest);
     }
